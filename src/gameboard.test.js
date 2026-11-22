@@ -26,4 +26,12 @@ describe("Makes a gameboard class", () => {
         expect(testShip.hits).toBe(1);
         expect(testBoard.misses).toContainEqual([0, 1]);
     })
+
+    it("Reports when all ships are sunk", () => {
+        const testBoard = new Gameboard();
+        testBoard.placeShip(1, 1);
+        expect(testBoard.allShipsSunk()).toBe(false);
+        testBoard.receiveAttack(1, 1);
+        expect(testBoard.allShipsSunk()).toBe(true);
+    });
 })
