@@ -11,8 +11,8 @@ export default class Gameboard {
 
     #createBoard(width, height) {
         const arr = [];
-        for (let i = 0; i < width; i++) {
-            arr.push(new Array(height).fill(null));
+        for (let i = 0; i < height; i++) {
+            arr.push(new Array(width).fill(null));
         }
         return arr;
     }
@@ -22,16 +22,16 @@ export default class Gameboard {
 
         for (let i = 0; i < length; i++) {
             if (orientation === "horizontal") {
-                this.board[x][y + i] = newShip;
+                this.board[y][x + i] = newShip;
             } else {
-                this.board[x + i][y] = newShip;
+                this.board[y + i][x] = newShip;
             }
         }
         this.ships.push(newShip);
     }
 
     #getShip(x, y) {
-        if (this.board[x][y]) return this.board[x][y];
+        if (this.board[y][x]) return this.board[y][x];
     }
 
     receiveAttack(x, y) {
