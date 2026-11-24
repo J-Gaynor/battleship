@@ -17,9 +17,16 @@ export default class Gameboard {
         return arr;
     }
 
-    placeShip(x, y) {
-        const newShip = new Ship(1);
-        this.board[x][y] = newShip;
+    placeShip(x, y, length = 1, orientation = "horizontal") {
+        const newShip = new Ship(length);
+
+        for (let i = 0; i < length; i++) {
+            if (orientation === "horizontal") {
+                this.board[x][y + i] = newShip;
+            } else {
+                this.board[x + i][y] = newShip;
+            }
+        }
         this.ships.push(newShip);
     }
 
