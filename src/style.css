@@ -52,7 +52,12 @@
   box-sizing: border-box;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: white;
 }
 
@@ -63,9 +68,10 @@ footer {
 }
 
 #game-container {
-  display: grid;
+  display: flex;
   gap: 1rem;
   justify-content: center;
+  width: 100%;
 }
 
 .tile-board {
@@ -82,16 +88,38 @@ footer {
 
 .tile {
   color: #16171d;
-  width: 30px;
+  width: 50px;
   background-color: white;
   aspect-ratio: 1;
   text-align: center;
 }
 
-.enemy-tile:hover {
-  border: greenyellow 2px solid
+#game-container:not(.game-over) .enemy-tile:not(.attacked):hover {
+  border: greenyellow 2px solid;
 }
 
 .bot-scanning {
   background-color: yellow;
+}
+
+.game-over-modal {
+  position: absolute;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  z-index: 100;
+  padding: 1rem;
+  background-color: #16171d;
+  margin-top: 100px;
+}
+
+#play-again-button {
+  background-color: yellowgreen;
+  font-size: 1rem;
+  width: 20%;
+  min-width: 100px;
+  padding: 0.3rem;
+}
+
+#play-again-button:hover {
+  cursor: pointer;
 }

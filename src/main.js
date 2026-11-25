@@ -7,10 +7,10 @@ const enemyBoard = new Player("robot");
 const playerBoard = new Player("human");
 
 const populateBoard = () => {
-    const enemyBoardContainer = document.getElementById("enemy-half");
     const playerBoardContainer = document.getElementById("player-half");
-    enemyBoardContainer.appendChild(boardBuilder(enemyBoard));
+    const enemyBoardContainer = document.getElementById("enemy-half");
     playerBoardContainer.appendChild(boardBuilder(playerBoard));
+    enemyBoardContainer.appendChild(boardBuilder(enemyBoard));
 }
 
 const boardBuilder = (boardInstance) => {
@@ -51,9 +51,11 @@ const boardBuilder = (boardInstance) => {
 const attackTile = (tile, gameBoard, x, y) => {
     if (currentTurn !== "human" || tile.textContent !== "") return;
     const isHit = gameBoard.receiveAttack(x, y);
+    tile.classList.add("attacked");
     tile.textContent = isHit ? 'S' : 'X';
     if (isHit && gameBoard.allShipsSunk()) {
         currentTurn = "gameOver";
+        gameOver("Human");
         return;
     }
     currentTurn = "robot";
@@ -84,11 +86,47 @@ const robotTurn = () => {
 
         if (isHit && playerBoard.gameboard.allShipsSunk()) {
             currentTurn = "gameOver";
+            gameOver("Computer");
             return;
         }
 
         currentTurn = "human";
-    }, 2500);
+    }, 2000);
 };
+
+const gameOver = (winner) => {
+    const gameContainer = document.getElementById("game-container");
+    const gameOverModal = document.createElement("div");
+    const gameOverText = document.createElement("h2");
+    const winnerText = document.createElement("h3");
+    const playAgainButton = document.createElement("button");
+
+    gameOverModal.className = "game-over-modal";
+    gameOverText.textContent = "Game Over!";
+    winnerText.textContent = `${winner} sunk all their opponent's battleships.`;
+    playAgainButton.textContent = "Play Again";
+    gameOverModal.id = "play-again-modal";
+    playAgainButton.id = "play-again-button";
+
+    playAgainButton.addEventListener("click", playAgain);
+
+    gameContainer.classList.add("game-over");
+    gameOverModal.append(gameOverText, winnerText, playAgainButton);
+    gameContainer.append(gameOverModal);
+}
+
+const playAgain = () => {
+    const playAgainModal = document.getElementById("play-again-modal");
+    const gameContainer = document.getElementById("game-container");
+    const playerBoardContainer = document.getElementById("player-half");
+    const enemyBoardContainer = document.getElementById("enemy-half");
+
+    gameContainer.classList.remove("game-over");
+    playAgainModal.remove();
+    playerBoardContainer.innerHTML = "";
+    enemyBoardContainer.innerHTML = "";
+    currentTurn = "human";
+    populateBoard();
+}
 
 populateBoard();
