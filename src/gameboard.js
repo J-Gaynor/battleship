@@ -18,6 +18,24 @@ export default class Gameboard {
     }
 
     placeShip(x, y, length = 1, orientation = "horizontal") {
+        if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
+            return false;
+        }
+        if (orientation === "horizontal" && x + length > this.width) {
+            return false;
+        }
+        if (orientation === "vertical" && y + length > this.height) {
+            return false;
+        }
+
+        for (let i = 0; i < length; i++) {
+            const checkX = orientation === "horizontal" ? x + i : x;
+            const checkY = orientation === "vertical" ? y + i : y;
+            if (this.board[checkY][checkX] instanceof Ship) {
+                return false;
+            }
+        }
+
         const newShip = new Ship(length);
 
         for (let i = 0; i < length; i++) {
@@ -28,6 +46,19 @@ export default class Gameboard {
             }
         }
         this.ships.push(newShip);
+        return true;
+    }
+
+    placeRandomShips(lengths = [5, 4, 3, 3, 2]) {
+        for (const length of lengths) {
+            let placed = false;
+            while (!placed) {
+                const x = Math.floor(Math.random() * this.width);
+                const y = Math.floor(Math.random() * this.height);
+                const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
+                placed = this.placeShip(x, y, length, orientation);
+            }
+        }
     }
 
     #getShip(x, y) {
